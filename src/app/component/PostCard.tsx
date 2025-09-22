@@ -2,15 +2,22 @@
 
 import * as React from "react";
 import Card from "@mui/material/Card";
-// import CardActions from "@mui/material/CardActions";
+import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-// import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Avatar, Box, CardHeader, IconButton, CardMedia } from "@mui/material";
 // import Image from "next/image";
 import { PostData } from "./Post";
+import LongMenu from "./post/MenuOption";
+import ModeCommentRoundedIcon from "@mui/icons-material/ModeCommentRounded";
+import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
+import ReplyRoundedIcon from "@mui/icons-material/ReplyRounded";
+import BookmarkBorderOutlinedIcon from "@mui/icons-material/BookmarkBorderOutlined";
+import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
+import ModeCommentOutlinedIcon from "@mui/icons-material/ModeCommentOutlined";
 
 export default function PostCard({
+  id,
   title,
   content,
   author,
@@ -41,28 +48,10 @@ export default function PostCard({
             "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
         }}
       >
+        {" "}
         <CardHeader
-          // avatar={
-          //   <Avatar sx={{ width: 56, height: 56 }}>
-          //     {author.image ? (
-          //       <Image
-          //         src={author.image}
-          //         alt={author.name ?? "Author"}
-          //         width={56}
-          //         height={56}
-          //         style={{ borderRadius: "50%" }}
-          //       />
-          //     ) : (
-          //       author.name?.[0] ?? "?"
-          //     )}
-          //   </Avatar>
-          // }
           sx={{ p: 0, px: 2, pt: 1 }}
-          action={
-            <IconButton aria-label="settings">
-              {/* <MoreVertIcon /> */}...
-            </IconButton>
-          }
+          action={<LongMenu id={id} />}
           title={
             <Box sx={{ display: "flex", flexDirection: "row", gap: 1 }}>
               <Typography
@@ -79,13 +68,7 @@ export default function PostCard({
               </Typography>
             </Box>
           }
-          // subheader={
-          //   <Typography sx={{ color: "#2CB4A9" }}>
-          //     {new Date(createdAt).toLocaleString()}
-          //   </Typography>
-          // }
         />
-
         <CardContent sx={{ py: 0, px: 2 }}>
           {/* {media && media.length > 0 && (
             <CardMedia
@@ -150,11 +133,31 @@ export default function PostCard({
             {new Date(createdAt).toLocaleString()}
           </Typography>
         </CardContent>
+        <CardActions
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            pb: 2,
+            px: 2,
+          }}
+        >
+          <Box>
+            <ModeCommentOutlinedIcon />
+          </Box>
+          <Box>
+            <ReplyRoundedIcon />
+          </Box>
+          <Box>
+            <FavoriteBorderOutlinedIcon />
+          </Box>
+          <Box>
+            <BookmarkBorderOutlinedIcon />
+          </Box>
 
-        {/* <CardActions>
-          <Button size="small">Share</Button>
-          <Button size="small">Learn More</Button>
-        </CardActions> */}
+          {/* <ModeCommentRoundedIcon/> */}
+          {/* <FavoriteRoundedIcon sx={{color: "blue"}}/> */}
+        </CardActions>
       </Card>
     </Box>
   );

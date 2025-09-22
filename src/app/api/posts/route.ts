@@ -125,12 +125,12 @@ export async function POST(req: Request) {
       }
     }
 
-    const newPost = await db.post.create({
+    await db.post.create({
       data: {
         title,
         content,
         authorId: Number(session?.user.id),
-        media: { create: imageUrls.map((url) => ({ url, type: "IMAGE" })) },
+        media: { create: imageUrls.map((url ) => ({ url, type: "IMAGE" })) },
       },
       include: { media: true },
     });

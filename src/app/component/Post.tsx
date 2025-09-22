@@ -49,9 +49,9 @@ const Post = () => {
           )
         : []
       ).map((post) => (
-        <Link href={`/dashboard/posts/${post.id}`} key={post.id}>
-          <PostCard {...post} />
-        </Link>
+        // <Link href={`/dashboard/posts/${post.id}`} key={post.id}>
+          <PostCard {...post} key={post.id} />
+        // </Link>
       ))}
     </div>
   );

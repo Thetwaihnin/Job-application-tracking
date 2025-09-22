@@ -4,7 +4,7 @@ export default function page() {
   return (
     <div className='h-screen w-full'>
       <div>
-        Hello world
+        Hello world finally
       </div>
     </div>
   )
