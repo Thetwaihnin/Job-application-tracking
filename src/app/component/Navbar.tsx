@@ -3,10 +3,7 @@
 import { AppBar, Box, Button, IconButton, Typography, useMediaQuery, useTheme } from "@mui/material";
 import Link from "next/link";
 import React from "react";
-import YouTubeIcon from "@mui/icons-material/YouTube";
-import GitHubIcon from "@mui/icons-material/GitHub";
-import TwitterIcon from "@mui/icons-material/Twitter";
-import InstagramIcon from "@mui/icons-material/Instagram";
+
 // import { getServerSession } from "next-auth";
 // import { authOptions } from "@/lib/auth";
 import SignOut from "./SignOut";
@@ -26,9 +23,9 @@ export default  function Navbar({handleDrawer}: SidebarProps) {
       sx={{
         position: "sticky",
         top: 0,
-        boxShadow: 1,
+        boxShadow: 6,
         padding: 2,
-        backgroundColor: "#7A1CAC",
+        // backgroundColor: "#7A1CAC",
         // backgroundColor: "#2CB4A9",
         zIndex: 1000,
       }}

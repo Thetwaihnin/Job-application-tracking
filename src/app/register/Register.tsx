@@ -1,6 +1,6 @@
 "use client";
 
-import { Stack, TextField, Box, Button, Typography } from "@mui/material";
+import { Stack, TextField, Box, Button, Typography, useTheme } from "@mui/material";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import * as React from "react";
 import CircularProgress from "@mui/material/CircularProgress";
+import { slate } from "@/theme/Color";
 
 const schema = z
   .object({
@@ -32,6 +33,7 @@ type FormData = z.infer<typeof schema>;
 
 const Register = () => {
   const router = useRouter();
+  const theme = useTheme()
   const [loading, setLoading] = useState(false);
   const {
     control,
@@ -79,10 +81,10 @@ const Register = () => {
           width: "500px",
           margin: "auto",
           paddingTop: "50px",
-          borderRadius: "8px",
-          backgroundColor: "#010101",
+          borderRadius: "50px",
+          backgroundColor: theme.palette.mode === "dark" ? slate[700] : "",
           opacity: 0.9,
-          boxShadow: 6,
+          boxShadow: 10,
           padding: 3,
           marginTop: "24px",
         }}
@@ -96,7 +98,7 @@ const Register = () => {
             paddingBottom: 2,
           }}
         >
-          <Typography variant="body1" component="h2" sx={{ color: "white", fontSize: "24px" }}>
+          <Typography variant="body1" component="h2" sx={{  fontSize: "24px" }}>
             Welcome!
           </Typography>
         </Box>
@@ -109,21 +111,20 @@ const Register = () => {
               label="Name"
               variant="outlined"
               sx={{
-                "& .MuiOutlinedInput-root": {
-                  color: "white",
-                  "& fieldset": {
-                    borderColor: "blue",
-                  },
-                  "&:hover fieldset": {
-                    borderColor: "blue",
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: "blue",
-                  },
-                },
-                "& .MuiInputLabel-root": {
-                  color: "blue",
-                },
+                // "& .MuiOutlinedInput-root": {
+                  // "& fieldset": {
+                  //   borderColor: "blue",
+                  // },
+                //   "&:hover fieldset": {
+                //     borderColor: "blue",
+                //   },
+                //   "&.Mui-focused fieldset": {
+                //     borderColor: "blue",
+                //   },
+                // },
+                // "& .MuiInputLabel-root": {
+                //   color: "blue",
+                // },
               }}
               error={!!errors.name}
               helperText={errors.name?.message}
@@ -138,23 +139,23 @@ const Register = () => {
             <TextField
               {...field}
               label="Email"
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  color: "white",
-                  "& fieldset": {
-                    borderColor: "blue",
-                  },
-                  "&:hover fieldset": {
-                    borderColor: "blue",
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: "blue",
-                  },
-                },
-                "& .MuiInputLabel-root": {
-                  color: "blue",
-                },
-              }}
+              // sx={{
+              //   "& .MuiOutlinedInput-root": {
+              //     color: "blue",
+              //     "& fieldset": {
+              //       borderColor: "blue",
+              //     },
+              //     "&:hover fieldset": {
+              //       borderColor: "blue",
+              //     },
+              //     "&.Mui-focused fieldset": {
+              //       borderColor: "blue",
+              //     },
+              //   },
+              //   "& .MuiInputLabel-root": {
+              //     color: "blue",
+              //   },
+              // }}
               error={!!errors.email}
               helperText={errors.email?.message}
             />
@@ -166,23 +167,23 @@ const Register = () => {
           render={({ field }) => (
             <TextField
               {...field}
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  color: "white",
-                  "& fieldset": {
-                    borderColor: "blue",
-                  },
-                  "&:hover fieldset": {
-                    borderColor: "blue",
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: "blue",
-                  },
-                },
-                "& .MuiInputLabel-root": {
-                  color: "blue",
-                },
-              }}
+              // sx={{
+              //   "& .MuiOutlinedInput-root": {
+              //     color: "blue",
+              //     "& fieldset": {
+              //       borderColor: "blue",
+              //     },
+              //     "&:hover fieldset": {
+              //       borderColor: "blue",
+              //     },
+              //     "&.Mui-focused fieldset": {
+              //       borderColor: "blue",
+              //     },
+              //   },
+              //   "& .MuiInputLabel-root": {
+              //     color: "blue",
+              //   },
+              // }}
               type="password"
               label="Password"
               error={!!errors.password}
@@ -198,23 +199,23 @@ const Register = () => {
               {...field}
               type="password"
               label="Confirm Password"
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  color: "white",
-                  "& fieldset": {
-                    borderColor: "blue",
-                  },
-                  "&:hover fieldset": {
-                    borderColor: "blue",
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: "blue",
-                  },
-                },
-                "& .MuiInputLabel-root": {
-                  color: "blue",
-                },
-              }}
+              // sx={{
+              //   "& .MuiOutlinedInput-root": {
+              //     color: "blue",
+              //     "& fieldset": {
+              //       borderColor: "blue",
+              //     },
+              //     "&:hover fieldset": {
+              //       borderColor: "blue",
+              //     },
+              //     "&.Mui-focused fieldset": {
+              //       borderColor: "blue",
+              //     },
+              //   },
+              //   "& .MuiInputLabel-root": {
+              //     color: "blue",
+              //   },
+              // }}
               error={!!errors.confirmedPassword}
               helperText={errors.confirmedPassword?.message}
             />
@@ -225,7 +226,7 @@ const Register = () => {
           sx={{
             "&:hover": {
               backgroundColor: "primary.main",
-              color: "white"
+              color: "blue"
             },
           }}
           variant="outlined"
@@ -234,9 +235,9 @@ const Register = () => {
           {loading ? <CircularProgress size="30px" /> : "Register"}
         </Button>
         {/* <Box component="span" sx={{color: 'white', marginX: "auto", display: "flex",padding: 0, justifyContent: "center"}}>or</Box> */}
-        <Box sx={{ color: "white", display: "flex", paddingBottom: 5 }}>
+        <Box sx={{ display: "flex", paddingBottom: 5 }}>
           <Typography component="p">Already have an account?</Typography>
-          <Box component="span" sx={{ color: "blue", marginX: 1 }}> 
+          <Box component="span" sx={{ color: "lightblue", marginX: 1 }}> 
             <Link href="/login">Login</Link>
           </Box>
           here!

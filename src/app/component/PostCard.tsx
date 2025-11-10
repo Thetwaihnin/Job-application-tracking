@@ -15,15 +15,20 @@ import ReplyRoundedIcon from "@mui/icons-material/ReplyRounded";
 import BookmarkBorderOutlinedIcon from "@mui/icons-material/BookmarkBorderOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import ModeCommentOutlinedIcon from "@mui/icons-material/ModeCommentOutlined";
+import BookmarkOutlinedIcon from '@mui/icons-material/BookmarkOutlined';
 
 export default function PostCard({
   id,
-  title,
   content,
   author,
   createdAt,
   media,
 }: PostData) {
+  const [likeClick, setLikeClick] = React.useState(false);
+  const [commentClick, setCommentClick] = React.useState(false);
+  const [bookmarkClick, setBookmarkClick] = React.useState(false);
+  const [shareClick, setShareClick] = React.useState(false);
+
   return (
     <Box
       sx={{
@@ -36,6 +41,7 @@ export default function PostCard({
         // margin: "20px auto",
         marginLeft: 3,
         marginRight: 0,
+        border: "1px"
       }}
     >
       <Card
@@ -109,7 +115,8 @@ export default function PostCard({
                   key={i}
                   component="img"
                   image={m.url}
-                  alt={`${title}-${i}`}
+                  alt="post content"
+                  // alt={`${title}-${i}`}
                   sx={{
                     maxHeight: 200,
                     width: "100%",
@@ -142,17 +149,40 @@ export default function PostCard({
             px: 2,
           }}
         >
-          <Box>
-            <ModeCommentOutlinedIcon />
+          <Box onClick={() => setCommentClick(!commentClick)}>
+            {/* {commentClick ? ( */}
+            {/* <ModeCommentRoundedIcon /> */}
+            {/* ) : ( */}
+            <ModeCommentOutlinedIcon sx={{ fontSize: 18, cursor: "pointer" }} />
+            {/* )} */}
           </Box>
           <Box>
-            <ReplyRoundedIcon />
+            <ReplyRoundedIcon sx={{ fontSize: 18, cursor: "pointer" }} />
           </Box>
-          <Box>
-            <FavoriteBorderOutlinedIcon />
+          <Box
+            sx={{ fontSize: "12px" }}
+            onClick={() => setLikeClick(!likeClick)}
+          >
+            {likeClick ? (
+              <FavoriteRoundedIcon
+                sx={{ color: "#35e664", fontSize: 18, cursor: "pointer" }}
+              />
+            ) : (
+              <FavoriteBorderOutlinedIcon
+                sx={{ fontSize: 18, cursor: "pointer" }}
+              />
+            )}
           </Box>
-          <Box>
-            <BookmarkBorderOutlinedIcon />
+          <Box onClick={()=>setBookmarkClick(!bookmarkClick)}>
+            {bookmarkClick ? (
+              <BookmarkOutlinedIcon
+                sx={{ color: "yellow", fontSize: 18, cursor: "pointer" }}
+              />
+            ) : (
+              <BookmarkBorderOutlinedIcon
+                sx={{ fontSize: 18, cursor: "pointer" }}
+              />
+            )}
           </Box>
 
           {/* <ModeCommentRoundedIcon/> */}

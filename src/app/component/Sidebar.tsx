@@ -12,14 +12,12 @@ import {
 } from "@mui/material";
 import { Drawers } from "./ClientWrapper";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
-import LogoutIcon from '@mui/icons-material/Logout';
-import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import SettingsIcon from '@mui/icons-material/Settings';
+import LogoutIcon from "@mui/icons-material/Logout";
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import SettingsIcon from "@mui/icons-material/Settings";
+import Link from "next/link";
+import ThemeToggle from "./theme/ThemeToggle";
 
-// interface SidebarProps {
-//   open: boolean;
-//   onClose: () => void;
-// }
 const drawerWidth = 240;
 const miniDrawerWidth = 72;
 
@@ -41,7 +39,7 @@ export default function Sidebar({ open, setOpen }: Drawers) {
         }}
       >
         <Toolbar />
-        <List >
+        <List>
           <ListItem
             component="button"
             sx={{
@@ -49,7 +47,7 @@ export default function Sidebar({ open, setOpen }: Drawers) {
               paddingLeft: 6,
               cursor: "pointer",
               "&:hover": {
-                backgroundColor: "rgba(255, 0, 0, 0.2)"
+                backgroundColor: "rgba(255, 0, 0, 0.2)",
               },
             }}
           >
@@ -72,7 +70,7 @@ export default function Sidebar({ open, setOpen }: Drawers) {
             flexShrink: 0,
             "& .MuiDrawer-paper": {
               width: miniDrawerWidth,
-              backgroundColor: "#2E073F",
+              // backgroundColor: "#2E073F",
               zIndex: 900,
               overflowX: "hidden",
               transition: theme.transitions.create("width", {
@@ -87,38 +85,81 @@ export default function Sidebar({ open, setOpen }: Drawers) {
         >
           <Toolbar />
           <List sx={{ marginX: 1, paddingY: 3 }}>
-            <ListItem component="button" sx={{ marginBottom: 2 , cursor: "pointer",
-              "&:hover": {
-                backgroundColor: "rgba(255, 0, 0, 0.2)"
-              } }}>
-              <ListItemIcon sx={{ fontSize: "12px", fontWeight: "bold" , color: "#35e664",  }}>
-                <AccountBoxIcon/>
-              </ListItemIcon>
-              <ListItemText primary="Profile" sx={{ color: "#35e664" }} />
-            </ListItem>
+            <Link href="/profile">
+              <ListItem
+                component="button"
+                sx={{
+                  marginBottom: 2,
+                  cursor: "pointer",
+                  "&:hover": {
+                    backgroundColor: "rgba(255, 0, 0, 0.2)",
+                  },
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    fontSize: "12px",
+                    fontWeight: "bold",
+                    color: "#35e664",
+                  }}
+                >
+                  <AccountBoxIcon />
+                </ListItemIcon>
+                <ListItemText primary="Profile" sx={{ color: "#35e664" }} />
+              </ListItem>
+            </Link>
 
-            <ListItem component="button" sx={{ marginBottom: 2 , cursor: "pointer",
-              "&:hover": {
-                backgroundColor: "rgba(255, 0, 0, 0.2)"
-              } }}>
-              <ListItemIcon sx={{ fontSize: "12px", fontWeight: "bold" , color: "#35e664" }}>
-                <LogoutIcon/>
+            <ListItem
+              component="button"
+              sx={{
+                marginBottom: 2,
+                cursor: "pointer",
+                "&:hover": {
+                  backgroundColor: "rgba(255, 0, 0, 0.2)",
+                },
+              }}
+            >
+              <ListItemIcon
+                sx={{ fontSize: "12px", fontWeight: "bold", color: "#35e664" }}
+              >
+                <LogoutIcon />
               </ListItemIcon>
               <ListItemText primary="Logout" sx={{ color: "#35e664" }} />
             </ListItem>
 
-            <ListItem component="button" sx={{ marginBottom: 2 , cursor: "pointer",
-              "&:hover": {
-                backgroundColor: "rgba(255, 0, 0, 0.2)"
-              } }}>
-              <ListItemIcon sx={{ fontSize: "12px", fontWeight: "bold" , color: "#35e664" }}>
-                <SettingsIcon/>
+            <ListItem
+              component="button"
+              sx={{
+                marginBottom: 2,
+                cursor: "pointer",
+                "&:hover": {
+                  backgroundColor: "rgba(255, 0, 0, 0.2)",
+                },
+              }}
+            >
+              <ListItemIcon
+                sx={{ fontSize: "12px", fontWeight: "bold", color: "#35e664" }}
+              >
+                <SettingsIcon />
               </ListItemIcon>
               <ListItemText primary="Settings" sx={{ color: "#35e664" }} />
             </ListItem>
-            {/* <ListItem component="button">
-              <ListItemText primary="Starred" />
-            </ListItem> */}
+            <ListItem
+              sx={{
+                marginBottom: 2,
+                cursor: "pointer",
+                "&:hover": {
+                  backgroundColor: "rgba(255, 0, 0, 0.2)",
+                },
+              }}
+            >
+              <ListItemIcon
+                sx={{ fontSize: "12px", fontWeight: "bold", color: "#35e664" }}
+              >
+                <ThemeToggle/>
+              </ListItemIcon>
+              <ListItemText primary="Mode" sx={{ color: "#35e664" }} />
+            </ListItem>
           </List>
         </Drawer>
       )}

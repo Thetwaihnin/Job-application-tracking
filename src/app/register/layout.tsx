@@ -13,9 +13,9 @@ export default function RootLayout({
   return (
     <Box sx={{
         minHeight: "100vh",
-        backgroundImage: "url('/halloweenHd.jpg')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
+        // backgroundImage: "url('/halloweenHd.jpg')",
+        // backgroundSize: "cover",
+        // backgroundPosition: "center",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",

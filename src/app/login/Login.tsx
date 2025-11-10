@@ -76,17 +76,16 @@ const Login = () => {
           marginTop: "60px",
           padding: 4,
           opacity: 0.9,
-
-          borderRadius: "12px",
-          backgroundColor: "#121212",
-          boxShadow: 6,
+          borderRadius: "50px",
+          // backgroundColor: "#121212",
+          boxShadow: 10,
         }}
       >
         <Box sx={{ textAlign: "center" }}>
           <Typography
             variant="body1"
             component="h2"
-            sx={{ color: "white", fontWeight: "bold", fontSize: "24px" }}
+            sx={{ fontWeight: "bold", fontSize: "24px" }}
           >
             Welcome!
           </Typography>
@@ -103,12 +102,12 @@ const Login = () => {
               fullWidth
               sx={{
                 "& .MuiOutlinedInput-root": {
-                  color: "white",
-                  "& fieldset": { borderColor: error ? "red" : "blue" },
-                  "&:hover fieldset": { borderColor: error ? "red" : "blue" },
-                  "&.Mui-focused fieldset": { borderColor: error ? "red" : "blue" },
+                  color: "blue",
+                  "& fieldset": { borderColor: error ? "red" : "" },
+                  "&:hover fieldset": { borderColor: error ? "red" : "" },
+                  "&.Mui-focused fieldset": { borderColor: error ? "red" : "" },
                 },
-                "& .MuiInputLabel-root": { color: "white" },
+                // "& .MuiInputLabel-root": { color: "blue" },
               }}
               error={!!errors.email}
               helperText={errors.email?.message}
@@ -128,12 +127,12 @@ const Login = () => {
               fullWidth
               sx={{
                 "& .MuiOutlinedInput-root": {
-                  color: "white",
-                 "& fieldset": { borderColor: error ? "red" : "blue" },
-                  "&:hover fieldset": { borderColor: error ? "red" : "blue" },
-                  "&.Mui-focused fieldset": { borderColor: error ? "red" : "blue" },
+                  color: "blue",
+                 "& fieldset": { borderColor: error ? "red" : "" },
+                  "&:hover fieldset": { borderColor: error ? "red" : "" },
+                  "&.Mui-focused fieldset": { borderColor: error ? "red" : "" },
                 },
-                "& .MuiInputLabel-root": { color: "white" },
+                // "& .MuiInputLabel-root": { color: "blue" },
               }}
               error={!!errors.password}
               helperText={errors.password?.message}
@@ -142,7 +141,7 @@ const Login = () => {
         />
 
         {/* Normal login button */}
-        <Button type="submit" variant="outlined" sx={{ borderColor: "blue","&:hover": { backgroundColor: "primary.main", color: "white" } }} fullWidth disabled={loading}>
+        <Button type="submit" variant="outlined" sx={{ borderColor: "blue","&:hover": { backgroundColor: "primary.main", color: "black" } }} fullWidth disabled={loading}>
           {loading ? <CircularProgress size="30px" /> : "Login"}
         </Button>
 
@@ -164,7 +163,7 @@ const Login = () => {
           <Typography component="span">Don’t have an account? </Typography>
           <Link
             href="/register"
-            style={{ color: "skyblue", textDecoration: "none" }}
+            style={{ color: "blue", textDecoration: "none" }}
           >
             Register here
           </Link>
