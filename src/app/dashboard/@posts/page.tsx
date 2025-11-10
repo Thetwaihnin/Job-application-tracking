@@ -79,7 +79,7 @@ export default function Page() {
         height: "100%",
         display: "flex",
         flexDirection: "column",
-        minHeight: "0",
+        minHeight: 0,
       }}
       component="section"
     >
@@ -131,13 +131,13 @@ export default function Page() {
       <Box
         sx={{
           flex: 1,
-          overflowY: "auto", // 👈 only posts scroll
-          pr: 1, // optional: avoid scrollbar overla
-          scrollbarWidth: "none", // Firefox
-          msOverflowStyle: "none", // IE & Edge
-          "&::-webkit-scrollbar": {
-            display: "none", // Chrome, Safari
-          },
+          overflowY: "auto", 
+          pr: 1, 
+          // scrollbarWidth: "none", 
+          // msOverflowStyle: "none", 
+          // "&::-webkit-scrollbar": {
+          //   display: "none", 
+          // },
         }}
       >
         <Post />

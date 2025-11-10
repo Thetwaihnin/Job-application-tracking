@@ -21,11 +21,11 @@ const ClientWrapper = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       <Box
-        sx={{ display: "flex", flexDirection: "column", position: "relative", maxHeight: "100vh", minHeight: "100vh", backgroundImage: "url('/hauntedHome.jpg')", backgroundSize: "cover", }}
+        sx={{ display: "flex", flexDirection: "column", position: "relative",minHeight: "100vh",overflowY: "auto", }}
       >
-        <Navbar handleDrawer={handleDrawer} />
+        {/* <Navbar handleDrawer={handleDrawer} /> */}
 
-        <Box sx={{ display: "flex", flex: 1, height: "100%" }}>
+        <Box sx={{ display: "flex", flex: 1}}>
           <Sidebar open={open} setOpen={setOpen} />
           <Box component="main" sx={{ flex: 1, p: 2 }}>
             {/* <ProfilePic /> */}

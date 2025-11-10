@@ -17,7 +17,7 @@ export type PostFormProps = {
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   error: string | any;
 };
-const maxWords = 30;
+const maxWords = 50;
 
 export default function PostForm({ control, onSubmit, error  }: PostFormProps) {
   const [preview, setPreview] = useState<string[]>([]);

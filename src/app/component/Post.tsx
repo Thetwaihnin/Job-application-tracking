@@ -7,7 +7,7 @@ import axios from "axios";
 
 export type PostData = {
   id: number;
-  title: string;
+  // title: string;
   content?: string | null;
   createdAt: string;
   author: {
@@ -49,9 +49,9 @@ const Post = () => {
           )
         : []
       ).map((post) => (
-        <Link href={`/dashboard/posts/${post.id}`} key={post.id}>
-          <PostCard {...post} />
-        </Link>
+        // <Link href={`/dashboard/posts/${post.id}`} key={post.id}>
+          <PostCard {...post} key={post.id} />
+        // </Link>
       ))}
     </div>
   );

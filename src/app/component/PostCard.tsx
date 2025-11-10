@@ -2,21 +2,33 @@
 
 import * as React from "react";
 import Card from "@mui/material/Card";
-// import CardActions from "@mui/material/CardActions";
+import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-// import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Avatar, Box, CardHeader, IconButton, CardMedia } from "@mui/material";
 // import Image from "next/image";
 import { PostData } from "./Post";
+import LongMenu from "./post/MenuOption";
+import ModeCommentRoundedIcon from "@mui/icons-material/ModeCommentRounded";
+import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
+import ReplyRoundedIcon from "@mui/icons-material/ReplyRounded";
+import BookmarkBorderOutlinedIcon from "@mui/icons-material/BookmarkBorderOutlined";
+import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
+import ModeCommentOutlinedIcon from "@mui/icons-material/ModeCommentOutlined";
+import BookmarkOutlinedIcon from '@mui/icons-material/BookmarkOutlined';
 
 export default function PostCard({
-  title,
+  id,
   content,
   author,
   createdAt,
   media,
 }: PostData) {
+  const [likeClick, setLikeClick] = React.useState(false);
+  const [commentClick, setCommentClick] = React.useState(false);
+  const [bookmarkClick, setBookmarkClick] = React.useState(false);
+  const [shareClick, setShareClick] = React.useState(false);
+
   return (
     <Box
       sx={{
@@ -29,6 +41,7 @@ export default function PostCard({
         // margin: "20px auto",
         marginLeft: 3,
         marginRight: 0,
+        border: "1px"
       }}
     >
       <Card
@@ -41,28 +54,10 @@ export default function PostCard({
             "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
         }}
       >
+        {" "}
         <CardHeader
-          // avatar={
-          //   <Avatar sx={{ width: 56, height: 56 }}>
-          //     {author.image ? (
-          //       <Image
-          //         src={author.image}
-          //         alt={author.name ?? "Author"}
-          //         width={56}
-          //         height={56}
-          //         style={{ borderRadius: "50%" }}
-          //       />
-          //     ) : (
-          //       author.name?.[0] ?? "?"
-          //     )}
-          //   </Avatar>
-          // }
           sx={{ p: 0, px: 2, pt: 1 }}
-          action={
-            <IconButton aria-label="settings">
-              {/* <MoreVertIcon /> */}...
-            </IconButton>
-          }
+          action={<LongMenu id={id} />}
           title={
             <Box sx={{ display: "flex", flexDirection: "row", gap: 1 }}>
               <Typography
@@ -79,13 +74,7 @@ export default function PostCard({
               </Typography>
             </Box>
           }
-          // subheader={
-          //   <Typography sx={{ color: "#2CB4A9" }}>
-          //     {new Date(createdAt).toLocaleString()}
-          //   </Typography>
-          // }
         />
-
         <CardContent sx={{ py: 0, px: 2 }}>
           {/* {media && media.length > 0 && (
             <CardMedia
@@ -126,7 +115,8 @@ export default function PostCard({
                   key={i}
                   component="img"
                   image={m.url}
-                  alt={`${title}-${i}`}
+                  alt="post content"
+                  // alt={`${title}-${i}`}
                   sx={{
                     maxHeight: 200,
                     width: "100%",
@@ -150,11 +140,54 @@ export default function PostCard({
             {new Date(createdAt).toLocaleString()}
           </Typography>
         </CardContent>
+        <CardActions
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            pb: 2,
+            px: 2,
+          }}
+        >
+          <Box onClick={() => setCommentClick(!commentClick)}>
+            {/* {commentClick ? ( */}
+            {/* <ModeCommentRoundedIcon /> */}
+            {/* ) : ( */}
+            <ModeCommentOutlinedIcon sx={{ fontSize: 18, cursor: "pointer" }} />
+            {/* )} */}
+          </Box>
+          <Box>
+            <ReplyRoundedIcon sx={{ fontSize: 18, cursor: "pointer" }} />
+          </Box>
+          <Box
+            sx={{ fontSize: "12px" }}
+            onClick={() => setLikeClick(!likeClick)}
+          >
+            {likeClick ? (
+              <FavoriteRoundedIcon
+                sx={{ color: "#35e664", fontSize: 18, cursor: "pointer" }}
+              />
+            ) : (
+              <FavoriteBorderOutlinedIcon
+                sx={{ fontSize: 18, cursor: "pointer" }}
+              />
+            )}
+          </Box>
+          <Box onClick={()=>setBookmarkClick(!bookmarkClick)}>
+            {bookmarkClick ? (
+              <BookmarkOutlinedIcon
+                sx={{ color: "yellow", fontSize: 18, cursor: "pointer" }}
+              />
+            ) : (
+              <BookmarkBorderOutlinedIcon
+                sx={{ fontSize: 18, cursor: "pointer" }}
+              />
+            )}
+          </Box>
 
-        {/* <CardActions>
-          <Button size="small">Share</Button>
-          <Button size="small">Learn More</Button>
-        </CardActions> */}
+          {/* <ModeCommentRoundedIcon/> */}
+          {/* <FavoriteRoundedIcon sx={{color: "blue"}}/> */}
+        </CardActions>
       </Card>
     </Box>
   );
