@@ -2,12 +2,21 @@
 import MultiSegmentCircle from "@/components/CircularProgressBar";
 import { slate } from "@/theme/Color";
 import { Box, Stack, Typography, useTheme } from "@mui/material";
-
+import useSWR from "swr";
+import { fetcher } from "@/lib/fetcher";
 // type Job = {
 //   applicationCount: string;
 // };
 const Title = ({}) => {
-  const theme = useTheme()
+  const theme = useTheme();
+
+  const { data } = useSWR(
+    "/api/user/jobs",
+    fetcher
+  );
+
+  // const { APPLIED, INTERVIEW, OFFER, REJECTED, total } = data;
+
   return (
     <Stack direction="row" alignItems='center' spacing={2} sx={{ mt: 6,  }}>
       <Box
@@ -33,7 +42,7 @@ const Title = ({}) => {
           component="h1"
           sx={{ fontWeight: "bold", fontSize: "24px", color: "white" }}
         >
-          13
+          {data ? data.APPLIED : 0}
         </Typography>
       </Box>
       <Box
@@ -59,7 +68,7 @@ const Title = ({}) => {
           component="h1"
           sx={{ fontWeight: "bold", fontSize: "24px", color: "white" }}
         >
-          3
+          {data ? data.INTERVIEW : 0}
         </Typography>
       </Box>
       <Box
@@ -85,7 +94,7 @@ const Title = ({}) => {
           component="h1"
           sx={{ fontWeight: "bold", fontSize: "24px", color: "white" }}
         >
-          1
+          {data ? data.OFFER : 0}
         </Typography>
       </Box>
       <Box
@@ -111,7 +120,7 @@ const Title = ({}) => {
           component="h1"
           sx={{ fontWeight: "bold", fontSize: "24px", color: "white" }}
         >
-          8
+          {data ? data.REJECTED : 0}
         </Typography>
       </Box>
       <Box
