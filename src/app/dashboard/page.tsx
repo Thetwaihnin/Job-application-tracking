@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Typography, useTheme } from "@mui/material";
+import { Alert, Box, Snackbar, Typography } from "@mui/material";
 import Title from "./components/Title";
 // import KanbanBoard from "./components/Kanboard";
 import AddApplication from "@/components/AddApplication";
@@ -12,11 +12,10 @@ import CreateForm from "./components/CreateForm";
 import axios from "axios";
 import useSWR from "swr";
 import UpdateForm from "./components/UpdateForm";
-// import { Job } from "@/types/post";
 
 const Dashboard = () => {
-  const theme = useTheme();
-  // const [open,setOpen] = useState(false)
+  const [selected, setSelected] = useState(null);
+  const [snackOpen, setSnackOpen] = useState(false);
   const [createForm, setCreateForm] = useState<{
     open: boolean;
   }>({
@@ -29,8 +28,12 @@ const Dashboard = () => {
     open: false,
   });
 
-  const handleOnClose = () => {
-    setCreateForm({ open: false });
+  const handleOnClose = (status: string) => {
+    if (status === "create") {
+      setCreateForm({ open: false });
+    } else if (status === "update") {
+      setUpdateForm({ open: false });
+    }
   };
 
   const { data, mutate } = useSWR("/api/posts", () =>
@@ -95,12 +98,36 @@ const Dashboard = () => {
       <Box sx={{ mt: 6 }}>
         <JobTable
           data={data}
+          setSelected={setSelected}
           setUpdateForm={setUpdateForm}
-          open={updateForm.open}
         />
       </Box>
-      <CreateForm open={createForm.open} handleOnClose={handleOnClose} />
-      <UpdateForm open={updateForm.open} handleOnClose={handleOnClose} />
+      <CreateForm
+        open={createForm.open}
+        handleOnClose={() => handleOnClose("create")}
+      />
+      <UpdateForm
+        mutate={mutate}
+        open={updateForm.open}
+        handleOnClose={() => handleOnClose("update")}
+        selected={selected}
+        setSnackOpen={setSnackOpen}
+      />
+
+      <Snackbar
+        open={snackOpen}
+        autoHideDuration={6000}
+        onClose={() => setSnackOpen(false)}
+      >
+        <Alert
+          onClose={() => setSnackOpen(false)}
+          severity="success"
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          Updated Successfully!
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

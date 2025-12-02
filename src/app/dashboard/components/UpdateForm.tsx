@@ -3,8 +3,16 @@ import FormDialog from "@/components/FormDialog";
 import TextInput from "@/components/TextField";
 import { FormDialogType } from "@/types/form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@mui/material";
-import { useForm } from "react-hook-form";
+import {
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+} from "@mui/material";
+import { useEffect } from "react";
+import { Controller, useForm } from "react-hook-form";
+import useSWR from "swr";
 import z from "zod";
 
 const JobSchema = z.object({
@@ -14,11 +22,22 @@ const JobSchema = z.object({
   appliedDate: z.string().min(1, "Applied date required"),
   jobLink: z.any().optional(),
   notes: z.string().optional(),
+  status: z.string().min(1, "Status is required"),
 });
 
 export type JobFormValues = z.infer<typeof JobSchema>;
 
-const UpdateForm = ({ open, handleOnClose }: FormDialogType) => {
+const UpdateForm = ({
+  open,
+  handleOnClose,
+  selected,
+  mutate,
+  setSnackOpen,
+}: FormDialogType & {
+  selected: any;
+  mutate: any;
+  setSnackOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   const { control, handleSubmit, reset } = useForm<JobFormValues>({
     resolver: zodResolver(JobSchema),
     defaultValues: {
@@ -28,40 +47,61 @@ const UpdateForm = ({ open, handleOnClose }: FormDialogType) => {
       appliedDate: "",
       jobLink: null,
       notes: "",
+      status: "",
     },
   });
 
   const submitHandler = async (formValues: JobFormValues) => {
     const formData = new FormData();
-
-    // append normal fields
+    formData.append("id", String(selected.id));
     formData.append("company", formValues.company);
     formData.append("position", formValues.position);
     formData.append("salary", formValues.salary ?? "");
     formData.append("appliedDate", formValues.appliedDate);
     formData.append("notes", formValues.notes || "");
+    formData.append("status", formValues.status);
 
     if (formValues.jobLink instanceof File) {
       formData.append("jobLink", formValues.jobLink);
     }
 
-    console.log(formValues);
+    console.log("form", formData);
 
     try {
-      const res = await fetch("/api/posts", {
-        method: "POST",
+      const res = await fetch(`/api/posts/${selected.id}`, {
+        method: "PUT",
         body: formData,
       });
 
       if (!res.ok) throw new Error("Failed to save");
 
-      console.log("Success");
+      await mutate();
+      setSnackOpen(true);
       reset();
       handleOnClose();
     } catch (error) {
       console.error("error:", error);
     }
   };
+
+  useEffect(() => {
+    console.log("selected in update form:", selected);
+    if (selected) {
+      reset({
+        company: selected.company || "",
+        position: selected.position || "",
+        salary: selected.salary || "",
+        appliedDate: selected.appliedDate?.split("T")[0] || "",
+        notes: selected.notes || "",
+        status: selected.status || "",
+        jobLink: null,
+      });
+    }
+  }, [selected, reset]);
+
+  const { data: status } = useSWR("/api/enum/status", () =>
+    fetch("/api/enum/status").then((res) => res.json())
+  );
 
   return (
     <>
@@ -74,7 +114,29 @@ const UpdateForm = ({ open, handleOnClose }: FormDialogType) => {
           <TextInput name="company" control={control} label="Company" />
           <TextInput name="position" control={control} label="Position" />
           <TextInput name="salary" control={control} label="Salary" />
-          <TextInput name="status" control={control} label="Status" />
+          <FormControl fullWidth sx={{ mb: 2 }}>
+            <InputLabel id="status-label">Status</InputLabel>
+            <Controller
+              name="status"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  {...field}
+                  labelId="status-label"
+                  label="Status"
+                  value={field.value || ""}
+                >
+                  {status &&
+                    status.map((s: any) => (
+                      <MenuItem key={s} value={s}>
+                        {s}
+                      </MenuItem>
+                    ))}
+                </Select>
+              )}
+            />
+          </FormControl>
+
           <TextInput name="notes" control={control} label="Location" />
           <TextInput
             name="appliedDate"

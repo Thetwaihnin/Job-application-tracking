@@ -1,14 +1,21 @@
 "use client";
 
 import React from "react";
-import { Box, TableCell, TableRow, useTheme } from "@mui/material";
+import {
+  Box,
+  TableCell,
+  TableRow,
+  useTheme,
+  IconButton,
+  Menu,
+  MenuItem,
+} from "@mui/material";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Table from "@/app/component/Table";
 import { getTableRowNo } from "@/utils/Table";
 import { slate } from "@/theme/Color";
 import { formatDate } from "@/utils/Date";
 import Link from "next/link";
-import { IconButton, Menu, MenuItem } from "@mui/material";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 type JobApplication = {
   id: number;
@@ -41,64 +48,80 @@ const tableHeaderData: TableHeaderDataType[] = [
   { text: "", style: { width: "5%" } },
 ];
 
-const Option = [
-  {
-    lable: "Edit",
-    key: "edit",
-  },
-  {
-    lable: "Delete",
-    key: "delete",
-  },
+const optionItems = [
+  { label: "Edit", key: "edit" },
+  { label: "Delete", key: "delete" },
 ];
 
 interface JobTableProps {
   data?: JobApplication[];
   setUpdateForm: (value: { open: boolean }) => void;
-  open: boolean;
+  setSelected: (value: any) => void;
 }
 
 const rowsPerPage = 5;
 
-const JobTable = ({ data = [], setUpdateForm, open }: JobTableProps) => {
+const statusColors: Record<string, string> = {
+    REJECTED: "red",
+    OFFER: "blue",
+    APPLIED: "green",
+    INTERVIEW: "orange",
+  };
+
+export default function JobTable({
+  data = [],
+  setUpdateForm,
+  setSelected,
+}: JobTableProps) {
   const theme = useTheme();
-  const [page, setPage] = React.useState(1); // 1-based page
+  const [page, setPage] = React.useState(1);
+
+  // Menu controls
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const openOption = Boolean(anchorEl);
+  const [menuRowId, setMenuRowId] = React.useState<number | null>(null);
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const openMenu = Boolean(anchorEl);
+
+  const handleMenuOpen = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    rowId: number
+  ) => {
     setAnchorEl(event.currentTarget);
+    setMenuRowId(rowId);
   };
 
-  const handleClose = () => {
+  const handleMenuClose = () => {
     setAnchorEl(null);
+    setMenuRowId(null);
   };
 
-  const handleOption = (key: string) => {
-    handleClose(); // close menu
+  const handleOption = (key: string, row: JobApplication) => {
+    handleMenuClose();
 
     if (key === "edit") {
       setUpdateForm({ open: true });
+      setSelected(row);
     }
 
     if (key === "delete") {
-      console.log("delete clicked");
+      console.log("Delete clicked for row:", row.id);
     }
   };
 
-  // Ensure page is valid when data length changes
+  // Pagination fix — always compute correct maxPage
   React.useEffect(() => {
-    const maxPage = Math.max(3, Math.ceil((data?.length ?? 0) / rowsPerPage));
+    const maxPage = Math.ceil((data?.length ?? 0) / rowsPerPage) || 1;
+
     if (page > maxPage) {
       setPage(maxPage);
     }
   }, [data, page]);
 
-  // Safe slicing (1-based page)
+  // Slice data for pagination (1-based)
   const start = (page - 1) * rowsPerPage;
-  const end = start + rowsPerPage;
-  const paginatedData = (data ?? []).slice(start, end);
+  const paginatedData = data.slice(start, start + rowsPerPage);
 
+  
   return (
     <Box
       sx={{
@@ -120,13 +143,16 @@ const JobTable = ({ data = [], setUpdateForm, open }: JobTableProps) => {
             <TableCell align="left" sx={{ fontSize: 20 }}>
               {getTableRowNo(page, index)}
             </TableCell>
+
             <TableCell sx={{ fontSize: 20 }}>{row.company}</TableCell>
             <TableCell sx={{ fontSize: 20 }}>{row.position}</TableCell>
-            <TableCell sx={{ fontSize: 20 }}>{row.status}</TableCell>
+            <TableCell sx={{ fontSize: 20, color: statusColors[row.status] || "inherit", }}>{row.status}</TableCell>
             <TableCell sx={{ fontSize: 20 }}>{row.salary}</TableCell>
+
             <TableCell sx={{ fontSize: 20 }}>
               {formatDate(row.appliedDate, "short")}
             </TableCell>
+
             <TableCell sx={{ fontSize: 20 }}>
               {row.jobLink && (
                 <Link
@@ -138,25 +164,29 @@ const JobTable = ({ data = [], setUpdateForm, open }: JobTableProps) => {
                 </Link>
               )}
             </TableCell>
+
             <TableCell sx={{ fontSize: 20 }}>{row.notes}</TableCell>
+
+            {/* Menu Button */}
             <TableCell sx={{ fontSize: 20 }}>
-              <IconButton onClick={handleClick}>
+              <IconButton onClick={(e) => handleMenuOpen(e, row.id)}>
                 <MoreVertIcon />
               </IconButton>
 
               <Menu
                 anchorEl={anchorEl}
-                open={openOption}
-                onClose={handleClose}
+                open={openMenu && menuRowId === row.id}
+                onClose={handleMenuClose}
                 anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
                 transformOrigin={{ vertical: "top", horizontal: "right" }}
               >
-                {Option.map((o, i) => (
+                {optionItems.map((o) => (
                   <MenuItem
-                    onClick={() => handleOption(o.key)}
+                    key={o.key}
+                    onClick={() => handleOption(o.key, row)}
                     sx={{ width: "200px", p: 1 }}
                   >
-                    {o.lable}
+                    {o.label}
                   </MenuItem>
                 ))}
               </Menu>
@@ -166,6 +196,4 @@ const JobTable = ({ data = [], setUpdateForm, open }: JobTableProps) => {
       </Table>
     </Box>
   );
-};
-
-export default JobTable;
+}
