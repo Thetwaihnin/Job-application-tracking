@@ -32,10 +32,12 @@ const UpdateForm = ({
   handleOnClose,
   selected,
   mutate,
+  statusMutation,
   setSnackOpen,
 }: FormDialogType & {
   selected: any;
   mutate: any;
+  statusMutation: any;
   setSnackOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const { control, handleSubmit, reset } = useForm<JobFormValues>({
@@ -76,6 +78,7 @@ const UpdateForm = ({
       if (!res.ok) throw new Error("Failed to save");
 
       await mutate();
+      await statusMutation();
       setSnackOpen(true);
       reset();
       handleOnClose();

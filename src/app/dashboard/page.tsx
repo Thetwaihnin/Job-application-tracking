@@ -6,12 +6,12 @@ import Title from "./components/Title";
 import AddApplication from "@/components/AddApplication";
 import JobTable from "./components/TableData";
 // import { slate, gray } from "@/theme/Color";
-// import MultiSegmentCircle from "@/components/CircularProgressBar";
 import { useState } from "react";
 import CreateForm from "./components/CreateForm";
 import axios from "axios";
 import useSWR from "swr";
 import UpdateForm from "./components/UpdateForm";
+import { fetcher } from "@/lib/fetcher";
 
 const Dashboard = () => {
   const [selected, setSelected] = useState(null);
@@ -38,9 +38,13 @@ const Dashboard = () => {
 
   const { data, mutate } = useSWR("/api/posts", () =>
     axios.get("/api/posts").then((res) => {
-      // console.log(res.data);
       return res.data;
     })
+  );
+
+  const { data: jobStatus, mutate : statusMutation } = useSWR(
+    "/api/user/jobs",
+    fetcher
   );
 
   return (
@@ -81,7 +85,7 @@ const Dashboard = () => {
           <AddApplication />
         </Box>
       </Box>
-      <Title />
+      <Title jobStatus={jobStatus} />
       {/* <Box
         sx={{
           boxShadow: 4,
@@ -108,6 +112,7 @@ const Dashboard = () => {
       />
       <UpdateForm
         mutate={mutate}
+        statusMutation={statusMutation}
         open={updateForm.open}
         handleOnClose={() => handleOnClose("update")}
         selected={selected}
