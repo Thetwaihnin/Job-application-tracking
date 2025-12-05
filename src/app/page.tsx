@@ -1,22 +1,41 @@
-import { Box } from "@mui/material";
-import Register from "./register/Register"
+// import { getServerSession } from "next-auth";
+// import { authOptions } from "@/lib/auth";
+// import { redirect } from "next/navigation";
+// import Dashboard from "./dashboard/page";
+// import { Box } from "@mui/material";
 
-const Page = () => {
-  return (
-    <Box
-      sx={{
-        minHeight: "100vh",
-        // backgroundImage: "url('/halloweenHd.jpg')",
-        // backgroundSize: "cover",
-        // backgroundPosition: "center",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Register />
-    </Box>
-  );
-};
+// export default async function DashboardPage() {
+//   const session = await getServerSession(authOptions);
 
-export default Page;
+//   if (!session) {
+//     redirect("/login");
+//   } else {
+//     redirect("/dashboard");
+//   }
+
+// }
+
+
+'use client';
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import Register from "./register/Register";
+
+export default function Page() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.push("/dashboard");
+    }
+  }, [status, router]);
+
+  if (status === "loading") return <div>Loading...</div>;
+
+  if (!session) return <Register />;
+
+  return null; 
+}
+
