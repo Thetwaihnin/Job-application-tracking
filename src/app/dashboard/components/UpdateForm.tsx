@@ -10,7 +10,7 @@ import {
   MenuItem,
   Select,
 } from "@mui/material";
-import { useEffect } from "react";
+import { useEffect,useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import useSWR from "swr";
 import z from "zod";
@@ -52,8 +52,11 @@ const UpdateForm = ({
       status: "",
     },
   });
+  const [loading, setLoading] = useState(false);
 
   const submitHandler = async (formValues: JobFormValues) => {
+    setLoading(true);
+
     const formData = new FormData();
     formData.append("id", String(selected.id));
     formData.append("company", formValues.company);
@@ -76,7 +79,7 @@ const UpdateForm = ({
       });
 
       if (!res.ok) throw new Error("Failed to save");
-
+      setLoading(false);
       await mutate();
       await statusMutation();
       setSnackOpen(true);
@@ -152,8 +155,8 @@ const UpdateForm = ({
             label="Resume"
             type="file"
           />
-          <Button variant="contained" fullWidth sx={{ mt: 2 }} type="submit">
-            Update
+          <Button variant="contained" disabled={loading} fullWidth sx={{ mt: 2 }} type="submit">
+            { loading ? "Updating..." : "Update"}
           </Button>
         </form>
       </FormDialog>

@@ -64,8 +64,8 @@ const rowsPerPage = 5;
 
 const statusColors: Record<string, string> = {
     REJECTED: "red",
-    OFFER: "blue",
-    APPLIED: "green",
+    OFFER: "green",
+    APPLIED: "skyblue",
     INTERVIEW: "orange",
   };
 

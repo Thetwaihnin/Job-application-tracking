@@ -18,7 +18,10 @@ const JobSchema = z.object({
 
 export type JobFormValues = z.infer<typeof JobSchema>;
 
-const CreateForm = ({ open, handleOnClose }: FormDialogType) => {
+const CreateForm = ({ open, handleOnClose,mutate,statusMutation }: FormDialogType & {
+  mutate: any;
+  statusMutation: any
+}) => {
   const { control, handleSubmit, reset } = useForm<JobFormValues>({
     resolver: zodResolver(JobSchema),
     defaultValues: {
@@ -56,6 +59,8 @@ const CreateForm = ({ open, handleOnClose }: FormDialogType) => {
       if (!res.ok) throw new Error("Failed to save");
 
       console.log("Success");
+      await mutate();
+      await statusMutation()
       reset();
       handleOnClose();
     } catch (error) {

@@ -156,6 +156,9 @@ const Dashboard = () => {
       <CreateForm
         open={createForm.open}
         handleOnClose={() => handleOnClose("create")}
+        mutate={mutate}
+        statusMutation={statusMutation}
+
       />
       <UpdateForm
         mutate={mutate}
@@ -168,7 +171,7 @@ const Dashboard = () => {
 
       <Snackbar
         open={snackOpen}
-        autoHideDuration={6000}
+        autoHideDuration={3000}
         onClose={() => setSnackOpen(false)}
       >
         <Alert

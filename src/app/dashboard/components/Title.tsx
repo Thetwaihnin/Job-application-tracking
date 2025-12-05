@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import MultiSegmentCircle from "@/components/CircularProgressBar";
 import { slate } from "@/theme/Color";
 import { Box, Stack, Typography, useTheme } from "@mui/material";
@@ -8,6 +8,7 @@ type JobStatusCounts = {
   INTERVIEW: number;
   OFFER: number;
   REJECTED: number;
+  total: number;
 };
 
 type Props = {
@@ -17,10 +18,17 @@ type Props = {
 const Title = ({ jobStatus }: Props) => {
   const theme = useTheme();
 
-  // const { APPLIED, INTERVIEW, OFFER, REJECTED, total } = jobStatus;
+  const applied = jobStatus?.APPLIED ?? 0;
+  const interview = jobStatus?.INTERVIEW ?? 0;
+  const offer = jobStatus?.OFFER ?? 0;
+  const rejected = jobStatus?.REJECTED ?? 0;
+  const total = jobStatus?.total ?? 0;
+
+  const percent = (value: number) =>
+    total === 0 ? 0 : Math.round((value / total) * 100);
 
   return (
-    <Stack direction="row" alignItems='center' spacing={2} sx={{ mt: 6,  }}>
+    <Stack direction="row" alignItems="center" spacing={2} sx={{ mt: 6 }}>
       <Box
         sx={{
           p: 2,
@@ -135,30 +143,60 @@ const Title = ({ jobStatus }: Props) => {
           boxShadow: 4,
           justifyContent: "center",
           alignItems: "center",
-          backgroundColor: theme.palette.mode === 'dark' ? slate[800] : ''
+          backgroundColor: theme.palette.mode === "dark" ? slate[800] : "",
         }}
       >
         <MultiSegmentCircle
           segments={[
-            { color: "#2196f3", value: 40 }, // blue
-            { color: "#ffeb3b", value: 20 }, // yellow
-            { color: "#4caf50", value: 25 }, // green
-            { color: "#f44336", value: 15 }, // red
+            { color: "#2196f3", value: percent(applied) }, // blue
+            { color: "#ffeb3b", value: percent(interview) }, // yellow
+            { color: "#4caf50", value: percent(offer) }, // green
+            { color: "#f44336", value: percent(rejected) }, // red
           ]}
         />
-        <Box sx={{display: 'flex', flexDirection: 'column', gap: 2}}>
-          <Box sx={{display: 'flex',gap: 1, justifyContent: 'flex-start', alignItems: 'center'}}>
-            <Box sx={{width: 8, height: 8, backgroundColor: 'skyblue'}}></Box>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+          <Box
+            sx={{
+              display: "flex",
+              gap: 1,
+              justifyContent: "flex-start",
+              alignItems: "center",
+            }}
+          >
+            <Box sx={{ width: 8, height: 8, backgroundColor: "skyblue" }}></Box>
             <Typography>Applications</Typography>
           </Box>
-          <Box sx={{display: 'flex',gap: 1, justifyContent: 'flex-start', alignItems: 'center'}}>
-            <Box sx={{width: 8, height: 8, backgroundColor: 'orange'}}></Box>
+          <Box
+            sx={{
+              display: "flex",
+              gap: 1,
+              justifyContent: "flex-start",
+              alignItems: "center",
+            }}
+          >
+            <Box sx={{ width: 8, height: 8, backgroundColor: "orange" }}></Box>
             <Typography>Interviews</Typography>
-          </Box><Box sx={{display: 'flex',gap: 1, justifyContent: 'flex-start', alignItems: 'center'}}>
-            <Box sx={{width: 8, height: 8, backgroundColor: 'green'}}></Box>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              gap: 1,
+              justifyContent: "flex-start",
+              alignItems: "center",
+            }}
+          >
+            <Box sx={{ width: 8, height: 8, backgroundColor: "green" }}></Box>
             <Typography>Offers</Typography>
-          </Box><Box sx={{display: 'flex',gap: 1, justifyContent: 'flex-start', alignItems: 'center'}}>
-            <Box sx={{width: 8, height: 8, backgroundColor: 'red'}}></Box>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              gap: 1,
+              justifyContent: "flex-start",
+              alignItems: "center",
+            }}
+          >
+            <Box sx={{ width: 8, height: 8, backgroundColor: "red" }}></Box>
             <Typography>Rejects</Typography>
           </Box>
         </Box>
