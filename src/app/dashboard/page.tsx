@@ -2,20 +2,34 @@
 
 import { Alert, Box, Snackbar, Typography } from "@mui/material";
 import Title from "./components/Title";
-// import KanbanBoard from "./components/Kanboard";
 import AddApplication from "@/components/AddApplication";
 import JobTable from "./components/TableData";
-// import { slate, gray } from "@/theme/Color";
 import { useState } from "react";
 import CreateForm from "./components/CreateForm";
 import axios from "axios";
 import useSWR from "swr";
+// 1. Import useSWRMutation
+import useSWRMutation from "swr/mutation"; 
 import UpdateForm from "./components/UpdateForm";
 import { fetcher } from "@/lib/fetcher";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogTitle from "@mui/material/DialogTitle";
+
+interface JobApplication {
+  id: string; 
+  jobTitle: string; 
+}
+
+const APPLICATIONS_KEY = "/api/posts"; 
 
 const Dashboard = () => {
-  const [selected, setSelected] = useState(null);
+  // Update selected type to JobApplication or null
+  const [selected, setSelected] = useState<JobApplication | null>(null); 
   const [snackOpen, setSnackOpen] = useState(false);
+  const [openConfirmedBox, setOpenConfirmedBox] = useState(false); // Renamed to match the variable name
+  
   const [createForm, setCreateForm] = useState<{
     open: boolean;
   }>({
@@ -36,16 +50,60 @@ const Dashboard = () => {
     }
   };
 
-  const { data, mutate } = useSWR("/api/posts", () =>
-    axios.get("/api/posts").then((res) => {
+  const deleteHandle = async (
+    url: string,
+    { arg }: { arg: { id: string } }
+  ) => {
+    const response = await fetch(`${url}/${arg.id}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to delete job application.");
+    }
+    return arg.id;
+  };
+
+  // useSWR hook for fetching the list data
+  const { data, mutate } = useSWR(APPLICATIONS_KEY, () =>
+    axios.get(APPLICATIONS_KEY).then((res) => {
       return res.data;
     })
   );
 
-  const { data: jobStatus, mutate : statusMutation } = useSWR(
+  //useSWRMutation hook for the delete operation
+  const { trigger: deleteTrigger, isMutating: isDeleting } = useSWRMutation(
+    APPLICATIONS_KEY,
+    deleteHandle,
+    {
+      onSuccess: () => {
+        mutate(); 
+        setSnackOpen(true);
+        setOpenConfirmedBox(false); // Close the dialog
+      },
+      onError: (error) => {
+        console.error("Delete Error:", error);
+        alert("Deletion failed. Please try again.");
+        setOpenConfirmedBox(false); // Close the dialog
+      },
+    }
+  );
+
+  const { data: jobStatus, mutate: statusMutation } = useSWR(
     "/api/user/jobs",
     fetcher
   );
+
+  const deleteHandler = () => {
+    if (selected) {
+      // Trigger the delete mutation with the ID of the selected row
+      deleteTrigger({ id: selected.id });
+      // The rest of the success/error handling is managed by useSWRMutation hooks
+    } else {
+      console.log("No application selected for deletion.");
+      setOpenConfirmedBox(false);
+    }
+  };
 
   return (
     <Box
@@ -55,7 +113,6 @@ const Dashboard = () => {
         marginX: "auto",
         display: "flex",
         flexDirection: "column",
-        // backgroundColor: "#F14A00",
       }}
     >
       <Box
@@ -79,33 +136,23 @@ const Dashboard = () => {
         <Box
           onClick={() => {
             setCreateForm({ open: true });
-            console.log(open);
           }}
         >
           <AddApplication />
         </Box>
       </Box>
       <Title jobStatus={jobStatus} />
-      {/* <Box
-        sx={{
-          boxShadow: 4,
-          p: 1,
-          borderRadius: "8px",
-          mt: 6,
-          backgroundColor:
-            theme.palette.mode === "dark" ? slate[700] : gray[800],
-        }}
-      >
-        <KanbanBoard />
-      </Box> */}
 
       <Box sx={{ mt: 6 }}>
         <JobTable
           data={data}
-          setSelected={setSelected}
+          setSelected={setSelected} // Set the row data when 'delete' is clicked
           setUpdateForm={setUpdateForm}
+          setOpenComfirmedBox={setOpenConfirmedBox} // Open the confirmation dialog
         />
       </Box>
+      
+      {/* ... (CreateForm and UpdateForm) ... */}
       <CreateForm
         open={createForm.open}
         handleOnClose={() => handleOnClose("create")}
@@ -130,9 +177,30 @@ const Dashboard = () => {
           variant="filled"
           sx={{ width: "100%" }}
         >
-          Updated Successfully!
+          {isDeleting ? "Deleting..." : "Success!"} 
         </Alert>
       </Snackbar>
+
+      {/*  Dialog for Delete Confirmation */}
+      <Dialog
+        open={openConfirmedBox}
+        aria-labelledby="responsive-dialog-title"
+      >
+        <DialogTitle id="responsive-dialog-title">
+          {selected 
+            ? `Are you sure you want to delete the application for "${selected.id}"?` 
+            : "Are you sure to delete this application?"}
+        </DialogTitle>
+
+        <DialogActions>
+          <Button autoFocus onClick={() => setOpenConfirmedBox(false)} disabled={isDeleting}>
+            Cancel
+          </Button>
+          <Button autoFocus onClick={deleteHandler} disabled={isDeleting}>
+            {isDeleting ? "Deleting..." : "Yes"}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

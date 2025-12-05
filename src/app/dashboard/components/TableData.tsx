@@ -57,6 +57,7 @@ interface JobTableProps {
   data?: JobApplication[];
   setUpdateForm: (value: { open: boolean }) => void;
   setSelected: (value: any) => void;
+  setOpenComfirmedBox: (value: boolean)=>void;
 }
 
 const rowsPerPage = 5;
@@ -72,6 +73,7 @@ export default function JobTable({
   data = [],
   setUpdateForm,
   setSelected,
+  setOpenComfirmedBox
 }: JobTableProps) {
   const theme = useTheme();
   const [page, setPage] = React.useState(1);
@@ -104,7 +106,8 @@ export default function JobTable({
     }
 
     if (key === "delete") {
-      console.log("Delete clicked for row:", row.id);
+      setSelected(row);
+      setOpenComfirmedBox(true)
     }
   };
 

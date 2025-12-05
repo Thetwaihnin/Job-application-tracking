@@ -88,7 +88,6 @@ const UpdateForm = ({
   };
 
   useEffect(() => {
-    console.log("selected in update form:", selected);
     if (selected) {
       reset({
         company: selected.company || "",
